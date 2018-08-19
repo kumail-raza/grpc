@@ -1,0 +1,8 @@
+1) Create a Role that can only access orders.
+
+db.createRole({role: "ordersOnly", privileges: [ {resource: {db: "grpc", collection: "orders"}, actions: ["find", "insert", "remove", "update"]  }  ], roles: []})
+
+
+2) Create a User with that role.
+
+db.createUser({ user: "ordersUser", pwd: "ordersPwd", roles: [ { role: "ordersOnly", db: "grpc" } ] })
