@@ -1,0 +1,26 @@
+syntax = "proto2";
+package customerprotocol;
+
+message Id {
+    required string id = 1;
+}
+
+message CustomerProto {
+    optional string id = 1;
+    optional string name = 2;
+    optional string address = 3;
+    optional string email = 4;    
+}
+message NothingFancy {
+    optional string toldyou = 1;
+}
+
+message CustomersProto {
+    repeated CustomerProto customers = 1;
+}
+
+service Customer {
+    rpc GetCustomer (Id) returns (CustomerProto);
+    rpc CreateCustomer (CustomerProto) returns (Id);
+    rpc GetAllCustomers(NothingFancy) returns (CustomersProto);
+}
