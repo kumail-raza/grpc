@@ -1,17 +1,25 @@
 package db
 
-import "github.com/mongodb/mongo-go-driver/mongo"
+import (
+	"github.com/globalsign/mgo"
+)
 
 type Mongo struct {
-	Client *mongo.Client
+	Session *mgo.Session
+	DBName  string
 }
 
 //NewMongoDB NewMongoDB
-func NewMongoDB(connStr string) (*Mongo, error) {
+func NewMongoDB(connStr string, dbName string) (*Mongo, error) {
 
-	client, err := mongo.NewClient(connStr)
+	session, err := mgo.Dial(connStr + "/" + dbName)
 	if err != nil {
 		return nil, err
 	}
-	return &Mongo{Client: client}, nil
+	return &Mongo{Session: session, DBName: dbName}, nil
+}
+
+//GetCollection GetCollection
+func (m *Mongo) GetCollection(colName string) *mgo.Collection {
+	return m.Session.DB(m.DBName).C(colName)
 }

@@ -15,8 +15,8 @@ func main() {
 	password := "ordersPwd"
 	dbName := "grpc"
 
-	connectionString := fmt.Sprintf("mongodb://%s:%s@localhost:27017/grpc", userName, password)
-	mongoDbConnection, err := db.NewMongoDB(connectionString)
+	connectionString := fmt.Sprintf("mongodb://%s:%s@localhost:27017", userName, password)
+	mongoDbConnection, err := db.NewMongoDB(connectionString, dbName)
 	if err != nil {
 		panic("Cannot connect to database")
 	}
