@@ -34,16 +34,8 @@ func (s *Server) GetOrder(ctx context.Context, in *Id) (*OrderProto, error) {
 		return nil, err
 	}
 
-	customerProtos := ToMultipleProtoCustomer(order.Customer)
-	ordersProto := &OrderProto{
-		Id:         convert.MongoIDToStringPtr(order.ID),
-		Name:       &order.Name,
-		Address:    &order.Address,
-		CustomerId: convert.MongoIDToStringPtr(order.CustomerID),
-		Customers:  &customerProtos,
-	}
-
-	return ordersProto, nil
+	ordersProto := ToOrderProto(order)
+	return &ordersProto, nil
 }
 
 //CreateOrder CreateOrder
@@ -84,17 +76,7 @@ func (s *Server) GetAllOrders(ctx context.Context, in *Noop) (*OrdersProto, erro
 		return nil, errors.New("No Orders Yet")
 	}
 
-	result := OrdersProto{}
-	for _, o := range orders {
-		customerProtos := ToMultipleProtoCustomer(o.Customer)
-		result.Orders = append(result.Orders, &OrderProto{
-			Name:       &o.Name,
-			Address:    &o.Address,
-			CustomerId: convert.MongoIDToStringPtr(o.CustomerID),
-			Id:         convert.MongoIDToStringPtr(o.ID),
-			Customers:  &customerProtos,
-		})
-	}
-	return &result, nil
+	ordersProto := ToMultipleOrderProto(orders)
+	return &ordersProto, nil
 
 }

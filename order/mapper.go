@@ -48,3 +48,31 @@ func ToMultipleProtoCustomer(c []customer.Customer) CustomersProto {
 	}
 	return customersProto
 }
+
+//ToOrderProto ToOrderProto
+func ToOrderProto(o Order) OrderProto {
+
+	protoCusts := ToMultipleProtoCustomer(o.Customer)
+	orderProto := OrderProto{
+		Id:         convert.MongoIDToStringPtr(o.ID),
+		Name:       &o.Name,
+		Address:    &o.Address,
+		CustomerId: convert.MongoIDToStringPtr(o.CustomerID),
+		Customers:  &protoCusts,
+	}
+	return orderProto
+}
+
+//ToMultipleOrderProto ToMultipleOrderProto
+func ToMultipleOrderProto(orders []Order) OrdersProto {
+
+	ordersProto := OrdersProto{}
+
+	for _, o := range orders {
+		oproto := ToOrderProto(o)
+		ordersProto.Orders = append(ordersProto.Orders, &oproto)
+	}
+
+	return ordersProto
+
+}
