@@ -1,5 +1,5 @@
 syntax = "proto2";
-package customerprotocol;
+package customer;
 
 message Id {
     required string id = 1;

@@ -1,0 +1,37 @@
+syntax = "proto2";
+package order;
+
+message Id {
+    required string id = 1;
+}
+
+message OrderProto {
+    optional string id = 1;
+    optional string name = 2;
+    optional string address = 3;
+    optional string customerId = 4;
+    optional CustomersProto customers = 5;    
+}
+
+message CustomerProto {
+    optional string id = 1;
+    optional string name = 2;
+    optional string address = 3;
+    optional string email = 4;    
+}
+
+message CustomersProto {
+    repeated CustomerProto customers = 1;
+}
+
+message Noop {}
+
+message OrdersProto {
+    repeated OrderProto orders = 1;
+}
+
+service Order {
+    rpc GetOrder (Id) returns (OrderProto);
+    rpc CreateOrder (OrderProto) returns (Id);
+    rpc GetAllOrders(Noop) returns (OrdersProto);
+}

@@ -11,17 +11,16 @@ import (
 	boom "github.com/darahayes/go-boom"
 	"github.com/globalsign/mgo/bson"
 	"github.com/minhajuddinkhan/grpc/customer"
-	"github.com/minhajuddinkhan/grpc/protocols"
 	"github.com/minhajuddinkhan/todogo/utils"
 )
 
 //GetCustomers GetCustomers
-func GetCustomers(c customerprotocol.CustomerClient) http.HandlerFunc {
+func GetCustomers(c customer.CustomerClient) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		cID := mux.Vars(r)["id"]
 		logrus.Info(cID)
-		incomingCustomer, err := c.GetCustomer(context.Background(), &customerprotocol.Id{Id: &cID})
+		incomingCustomer, err := c.GetCustomer(context.Background(), &customer.Id{Id: &cID})
 		if err != nil {
 			boom.BadRequest(w, err)
 			return
@@ -39,21 +38,21 @@ func GetCustomers(c customerprotocol.CustomerClient) http.HandlerFunc {
 }
 
 //CreateCustomer CreateCustomer
-func CreateCustomer(c customerprotocol.CustomerClient) http.HandlerFunc {
+func CreateCustomer(c customer.CustomerClient) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		var customer customer.Customer
-		err := utils.DecodeRequest(r, &customer)
+		var cust customer.Customer
+		err := utils.DecodeRequest(r, &cust)
 		if err != nil {
 			boom.BadRequest(w, err)
 			return
 		}
 		custID := string(bson.NewObjectId())
-		customerProtocol := &customerprotocol.CustomerProto{
+		customerProtocol := &customer.CustomerProto{
 			Id:      &custID,
-			Name:    &customer.Name,
-			Address: &customer.Address,
-			Email:   &customer.Email,
+			Name:    &cust.Name,
+			Address: &cust.Address,
+			Email:   &cust.Email,
 		}
 		newCustomerIDProto, err := c.CreateCustomer(r.Context(), customerProtocol)
 		if err != nil {
@@ -71,10 +70,10 @@ func CreateCustomer(c customerprotocol.CustomerClient) http.HandlerFunc {
 }
 
 //GetAllCustomers GetAllCustomers
-func GetAllCustomers(c customerprotocol.CustomerClient) http.HandlerFunc {
+func GetAllCustomers(c customer.CustomerClient) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		customersProto, err := c.GetAllCustomers(r.Context(), &customerprotocol.NothingFancy{})
+		customersProto, err := c.GetAllCustomers(r.Context(), &customer.NothingFancy{})
 		if err != nil {
 			boom.BadRequest(w, err)
 			return

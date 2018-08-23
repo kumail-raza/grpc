@@ -1,3 +1,5 @@
 build:
 	protoc -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/minhajuddinkhan/grpc \
-	  protocols/customer.proto
+	  customer/customer.proto
+	protoc -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/minhajuddinkhan/grpc \
+	  order/order.proto	

@@ -5,17 +5,17 @@ import (
 	"log"
 	"net"
 
-	"github.com/minhajuddinkhan/grpc/customer"
 	"github.com/minhajuddinkhan/grpc/db"
+	"github.com/minhajuddinkhan/grpc/order"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 const (
-	dbUserName          = "customerUser"
-	dbPassword          = "customerPwd"
-	dbName              = "grpc"
-	customerServicePort = ":3443"
+	dbUserName       = "ordersUser"
+	dbPassword       = "ordersPwd"
+	dbName           = "grpc"
+	orderServiceAddr = ":4443"
 )
 
 func main() {
@@ -27,8 +27,8 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	customer.RegisterCustomerServer(s, &customer.Server{Database: mongoDB})
-	lis, err := net.Listen("tcp", customerServicePort)
+	order.RegisterOrderServer(s, &order.Server{Database: mongoDB})
+	lis, err := net.Listen("tcp", orderServiceAddr)
 	if err != nil {
 		panic(err)
 	}
